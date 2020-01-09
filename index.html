@@ -1,0 +1,172 @@
+<style>
+    .calc {
+        font-family: sans-serif;
+        font-size: 12px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .calc .active{
+        background: #0084ff;
+        color: #fff;
+    }
+    .calc > div > label {
+        display: inline-block;
+        background: #eee;
+        min-width: 100px;
+        padding: 5px 10px;
+        text-align: right;
+        margin-right: 10px;
+    }
+
+    .calc > div >.btn {
+        display: inline-block;
+        padding: 10px 15px;
+        background: #eee;
+        cursor: pointer;
+    }
+
+    .calc > div > .btn:hover {
+        background: #ddd;
+    }
+
+    .calc .calc-first-number,
+    .calc .calc-second-number,
+    .calc .calc-operator-number,
+    .calc .calc-result-number {
+        margin: 10px 0;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .calc .calc-result-number > label {
+        background: #0084ff;
+        color: #fff;
+    }
+
+    .button-primary {
+        background: #0084ff !important;
+        color: #fff !important;
+    }
+
+    .button-primary:hover {
+        background: #399cfc !important;
+        color: #fff !important;
+    }
+</style>
+<div class="calc">
+	<div class="calc-first-number">
+		<label class="active">First Number</label>
+		<input class="number0" type="number" disabled>
+	</div>
+	<div class="calc-operator-number">
+		<label>Operator</label>
+		<input class="input" id="operator" disabled>
+	</div>
+	<div class="calc-second-number">
+		<label>Second Number</label>
+		<input type="number" class="number1" disabled>
+	</div>
+	<div class="calc-result-number">
+		<label>Result</label>
+		<input type="text" class="result" disabled>
+	</div>
+	<div>
+        <input class="btn roll" type="button" value="Roll">
+        <input class="btn number" type="button" value="0">
+		<input class="btn number" type="button" value="1">
+		<input class="btn number" type="button" value="2">
+		<input class="btn number" type="button" value="3">
+		<input class="btn number" type="button" value="4">
+		<input class="btn number" type="button" value="5">
+		<input class="btn number" type="button" value="6">
+		<input class="btn number" type="button" value="7">
+		<input class="btn number" type="button" value="8">
+		<input class="btn number" type="button" value="9">
+        <input class="btn operator" type="button" value="+">
+        <input class="btn operator" type="button" value="-">
+        <input class="btn operator" type="button" value="x">
+        <input class="btn operator" type="button" value="/">
+		<input class="btn submit" type="button" value="&equals;"></input>
+		<input class="btn clear" type="button" value="Clear"></input>
+		<input class="btn reset" type="button" value="Reset"></input>
+	</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+    var result = 0;
+    var activeDisplay = 0;
+    console.log(document.querySelector('.calc-first-number').children[0])
+    function nextDisplay(){
+        activeDisplay ===1?activeDisplay = 0:activeDisplay = 1;
+        document.querySelector('.calc-first-number').children[0].classList.toggle('active');
+        document.querySelector('.calc-second-number').children[0].classList.toggle('active');
+    }
+    //get number
+    var numberElement = document.querySelectorAll('.number');
+    for(var i =0;i<numberElement.length;i++){
+        numberElement[i].onclick = function(){
+            var Num = document.querySelector('.number'+activeDisplay);
+            Num.value += this.value ;
+            var Number = parseInt(Num);
+        }
+    }
+    //get operator
+    var operatorElement = document.querySelectorAll('.operator');
+    for(var i =0;i<operatorElement.length;i++){
+        operatorElement[i].onclick = function(){
+            document.querySelector('#operator').value = this.value;
+        }
+    }
+    var roll = document.querySelector('.roll');
+    roll.addEventListener('click',function () {
+        nextDisplay();
+    })
+    var clear = document.querySelector('.clear');
+    clear.addEventListener('click',function () {
+        document.querySelector('.number'+activeDisplay).value = '';
+    })
+
+    var reset = document.querySelector('.reset');
+    reset.addEventListener('click',function () {
+        document.querySelector('.number1').value = '';
+        document.querySelector('.number0').value = '';
+        document.querySelector('#operator').value= '';
+        document.querySelector('.result').value='';
+    })
+
+    var submit = document.querySelector('.submit');
+    submit.addEventListener('click',function () {
+        var Num0 =parseInt(document.querySelector('.number0').value);
+        var Num1 =parseInt(document.querySelector('.number1').value);
+        var Operator = document.querySelector('#operator').value;
+        switch (Operator) {
+            case '+':
+                result = Num0+Num1;
+                break;
+            case '-':
+                result = Num0-Num1;
+                break;
+            case 'x':
+                result = Num0*Num1;
+                break;
+            case '/':
+                if(Num1==0){
+                    alert('khong the chia cho so 0');
+                    document.querySelector('.number'+activeDisplay).value = '';
+                }else{
+                    result = Num0/Num1;
+                }
+                break;
+        }
+        var Result = document.querySelector('.result').value = result;
+    })
+})
+
+
+</script>
